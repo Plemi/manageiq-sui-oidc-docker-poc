@@ -7,11 +7,11 @@ This project is a POC [^1] to demonstrate that External Authentication on Manage
 - and on the **Self-Service UI** (and partially on the REST API, too)
 
 It relies on an experimental implementation of the *Hammer* version of **ManageIQ**, and more precisely on 2 forked MIQ official components: 
-- the [link](https://github.com/Plemi/manageiq-ui-service "ManagegIQ Api plugin"), 
-- and the [link](https://github.com/Plemi/manageiq-api "Service UI app").
+- the [ManagegIQ Api plugin](https://github.com/Plemi/manageiq-ui-service "ManagegIQ Api plugin"), 
+- and the [Service UI app](https://github.com/Plemi/manageiq-api "Service UI app").
 (See below for details about these forks).
 
-It uses **Keycloak** as an Identity Provider, and **Ansible** (automation tool) to configure Keycloak with a proper *realm* and a *client* for ManageIQ instance (following [link](https://www.manageiq.org/docs/reference/latest/auth/openid_connect "MIQ official guidelnes for OIDC")) and also to load some basic user fixtures (a "foo" test user belonging to a group matching MIQ super administrator group) into Keycloak DB, to easier things.
+It uses **Keycloak** as an Identity Provider, and **Ansible** (automation tool) to configure Keycloak with a proper *realm* and a *client* for ManageIQ instance (following [MIQ official guidelnes for OIDC](https://www.manageiq.org/docs/reference/latest/auth/openid_connect "MIQ official guidelnes for OIDC")) and also to load some basic user fixtures (a "foo" test user belonging to a group matching MIQ super administrator group) into Keycloak DB, to easier things.
 
 This POC only requires **Docker** on your host machine, in order to run **3 docker containers** (using docker-compose):
 - one for a monolithic Manageiq appliance
@@ -22,18 +22,18 @@ All the Apache and OIDC configuration (detailed in ManageIQ official documentati
 
 It uses modified manageiq docker images
 
-[^1] Proof of concept
-[^2] [link](https://en.wikipedia.org/wiki/OpenID_Connect "OpenID Connect")
+[^1]: Proof of concept
+[^2]: [OpenID Connect](https://en.wikipedia.org/wiki/OpenID_Connect "OpenID Connect")
 
 
 ### Requirements
 
 You must have **Docker Engine** and **Docker Compose** installed on your machine.
-Just follow these Official Docker guidelines, depending on your platform :
+Just follow these official Docker guidelines, depending on your platform :
 - Docker Engine : https://docs.docker.com/install/
 - Docker Compose : https://docs.docker.com/compose/install/
 
-Although not a requirement, [link](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git "Git") is obviously needed to clone this repository (the preferred way to get the source code of this project).
+Although not a requirement, [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git "Git") is obviously needed to clone this repository (the preferred way to get the source code of this project).
 
 
 ### Installation
@@ -57,11 +57,11 @@ Add the following lines at the end, then save and quit:
 127.0.0.1       server
 ~~~~
 
-On Windows, follow theese steps : https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/
+On Windows, follow [theese steps](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/ "how to edit hosts file on Windows")
 
 3. **Launch docker-compose stack**
 
-Move to the root of your local copy of the project 
+Move to the root of your local copy of the project: 
 ```shell
 cd manageiq-sui-oidc-docker-poc
 ```
@@ -69,7 +69,7 @@ Then just launch docker-compose command:
 ```shell
 docker-compose -f compose.yml up
 ```
-Notes: THe first time you build the stack, and depending on your internet connection, it can take about 5 or 10 minutes for the whole process to complete (the time to download parent docker images, build new ones, and run the containers), so be patient. For this reason, launching the stack in the background (adding option -d in the docker-compose command) is not advised, at least the first time.
+Notes: The first time you build the stack, and depending on your internet connection, it can take about 5 or 10 minutes for the whole process to complete (the time to download parent docker images, build new ones, and run the containers), so be patient. For this reason, launching the stack in the background (adding option -d in the docker-compose command) is not advised, at least the first time.
 
 You will know that everything is correctly started when you will be able:
 - to browse ManageIQ admin web view at this url: https://server/#/ (the first time, the browser will complain about incorrect SSL certificates, it's OK, just go through);
@@ -85,10 +85,10 @@ Wait for the whole playbook to finish (it takes about 30/40 sec).
 
 5. **Activate OIDC on the MIQ Appliance**
 
-As explained in the [link](https://www.manageiq.org/docs/reference/latest/auth/openid_connect#configuring-the-administrative-ui "official ManageIQ documention"), you need to complete the following steps:
+As explained in the [official ManageIQ documention](https://www.manageiq.org/docs/reference/latest/auth/openid_connect#configuring-the-administrative-ui "official ManageIQ documention"), you need to complete the following steps:
 
-From a browser (Chrome, Firefox, etc.), navigate to this url : https://server/#/. 
-Login as admin (default admin password is "smartvm"), then in Configure → Configuration → Authentication section:
+  From a browser (Chrome, Firefox, etc.), navigate to this url : https://server/#/. 
+  Login as admin (default admin password is "smartvm"), then in Configure → Configuration → Authentication section:
 
 1. Set mode to External (httpd)
 
@@ -105,19 +105,20 @@ Click Save and log out from admin web view.
 
 #### OIDC on the admin view
 
-To test OIDC external authentication on the admin web view, just go to the admin home page here: https://server/#/
-Then click on "Log in to corporate system"
-You'll be redirect to Keycloak realm login page.
-From there, sign in as "foo" user, using "foo" as username, and "bar" as password.
-Validate and you will be redirected to the admin dashboard view, logged in as "foo" super admin user.
+  To test OIDC external authentication on the admin web view, just go to the admin home page here: https://server/#/
+  Then click on "Log in to corporate system"
+  You'll be redirect to Keycloak realm login page.
+  From there, sign in as "foo" user, using "foo" as username, and "bar" as password.
+  Validate and you will be redirected to the admin dashboard view, logged in as "foo" super admin user.
 
 Notes : Obviously, authenticating to the admin interface requires to own the proper rights. That's the case for our "foo" user who belongs to the "EvmGroup-super_administrator" group.
 
 #### OIDC on the self service UI
 
-To test OIDC external authentication on the self service UI, just browse this url: https://server/ui/service/login
-From there, if OIDC has been properly enabled on the appliance, you will see two buttons allowing you to sign in on the admin or the SUI interface. Click on the SUI button. And from the Keycloak realm login view, use the same login/pass as for the admin UI (foo/bar).
-You'll be redirected to the Self Service UI, and logged in as "foo" user.
+  To test OIDC external authentication on the self service UI, just browse this url: https://server/ui/service/login
+  From there, if OIDC has been properly enabled on the appliance, you will see two buttons allowing you to sign in on the admin or the SUI interface.
+  Click on the SUI button. And from the Keycloak realm login view, use the same login/pass as for the admin UI (foo/bar).
+  You'll be redirected to the Self Service UI, and logged in as "foo" user.
 
 #### Switching between admin / SUI interfaces
 
