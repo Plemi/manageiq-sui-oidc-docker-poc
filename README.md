@@ -20,7 +20,7 @@ This POC only requires **Docker** on your host machine, in order to run **3 dock
 
 All the Apache and OIDC configuration (detailed in ManageIQ official documentation) is handled at docker build stages, and through an ansible playbook at run stage, so sandbox tests can be done quickly out of the box without the hassle of configuring things first.
 
-As explained below, the POC uses modified version of manageiq docker images.
+As explained below, the POC uses modified versions of manageiq docker images.
 
 
 ### Requirements
@@ -74,6 +74,7 @@ You will know that everything is correctly started when you will be able:
 
 
 4. **Configure Keycloak and load fixtures**
+
 Open another terminal window, and launch this docker command:
 ```shell
 docker exec -it manageiq-sui-oidc-docker-poc_keycloak_1 /opt/ansible/load-fixtures.sh
@@ -84,16 +85,16 @@ Wait for the whole playbook to finish (it takes about 30/40 sec).
 
 As explained in the [official ManageIQ documention](https://www.manageiq.org/docs/reference/latest/auth/openid_connect#configuring-the-administrative-ui "official ManageIQ documention"), you need to complete the following steps:
 
-From a browser (Chrome, Firefox, etc.), navigate to this url : https://server/#/. 
+From a browser (Chrome, Firefox, etc.), navigate to this url: https://server/#/. 
 Login as admin (default admin password is "smartvm"), then in Configure → Configuration → Authentication section:
 
-1. Set mode to External (httpd)
+1. Set mode to *External (httpd)*
 
-2. Check: Provider Type: Enable OpenID-Connect.
+2. Check: Provider Type: *Enable OpenID-Connect*.
 
-3. Check: Enable Single Signon.
+3. Check: *Enable Single Signon*.
 
-4. Check: Get User Groups from External Authentication (httpd)
+4. Check: *Get User Groups from External Authentication (httpd)*
 
 Click Save and log out from admin web view.
 
@@ -121,7 +122,8 @@ To test OIDC external authentication on the self service UI:
 #### Switching between admin / SUI interfaces
 
 When you are logged out, you can use the link present at the top of the Keycloak realm login page if you need to switch between admin and user interfaces.
-WHen you are logged in on the SUI, you can use the shortcut in the top menu to reach the admin view. You'll be connected without having to re-authenticate a second time.
+
+When you are logged in on the SUI, you can use the shortcut in the top menu to reach the admin view. You'll be connected without having to re-authenticate a second time.
 
 Note that as we use the same keycloak client for both interfaces, once you are connected on one, you can connect on the other without the need to re-authenticate because a valid session already exists on the Keycloak side.
 
@@ -139,7 +141,7 @@ This POC uses the following forks of official ManageIQ repositories / components
 
 Please be aware that these forks only work with the *Hammer* branch of ManageIQ.
 
-To dig deeper into the changes made in the MIQ components, you can have a look into this 2 main commits:
+To have an overview of the changes made in the MIQ components, you can take a look into this 2 main commits:
 
 https://github.com/Plemi/manageiq-ui-service/commit/249af259fe32bc48a7aefe752536c909cf909280
 https://github.com/Plemi/manageiq-api/commit/47af2f6346228b92e71f4ff6e9937f9111643988
