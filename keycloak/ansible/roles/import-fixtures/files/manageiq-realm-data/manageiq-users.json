@@ -1,0 +1,20 @@
+{
+  "createdTimestamp" : 1539687933087,
+  "username" : "foo",
+  "enabled" : true,
+  "totp" : false,
+  "emailVerified" : true,
+  "firstName" : "Hector",
+  "lastName" : "Foo",
+  "email" : "foo@test.com",
+  "disableableCredentialTypes" : [ "password" ],
+  "requiredActions" : [ ],
+  "notBefore" : 1562245867,
+  "access" : {
+    "manageGroupMembership" : true,
+    "view" : true,
+    "mapRoles" : true,
+    "impersonate" : true,
+    "manage" : true
+  }
+}

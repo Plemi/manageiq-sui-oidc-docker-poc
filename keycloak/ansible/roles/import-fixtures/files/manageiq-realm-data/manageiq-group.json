@@ -1,0 +1,13 @@
+{
+  "name" : "EvmGroup-super_administrator",
+  "path" : "/EvmGroup-super_administrator",
+  "attributes" : { },
+  "realmRoles" : [ "uma_authorization", "offline_access" ],
+  "clientRoles" : { },
+  "subGroups" : [ ],
+  "access" : {
+    "view" : true,
+    "manage" : true,
+    "manageMembership" : true
+  }
+}

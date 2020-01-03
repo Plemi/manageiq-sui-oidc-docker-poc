@@ -1,0 +1,92 @@
+---
+- name: authenticate on keycloak admin cli
+  command: "sh {{bin_dir}}/kcadm.sh config credentials --server {{kc_server}}/auth --realm master --user {{adm_user}} --password {{adm_pass}}"
+  tags:
+    authenticate
+
+- name: copy manageiq fixtures data
+  copy: >
+    src=manageiq-realm-data
+    dest={{parent_data_dir}}
+
+
+- name: check if manageiq realm already exists
+  command: "sh {{bin_dir}}/kcadm.sh get realms/{{realm_name}}"
+  ignore_errors: True
+  register: realm_results
+
+# - debug: msg="{{ realm_results }}"
+
+- name: delete manageiq realm if exists
+  command: "sh {{bin_dir}}/kcadm.sh delete realms/{{realm_name}}"
+  when: realm_results.rc == 0
+
+- name: create manageiq realm
+  command: "sh {{bin_dir}}/kcadm.sh create realms -f {{data_dir}}/manageiq-realm.json"
+
+
+- name: check if manageiq client already exists
+  shell: "{{bin_dir}}/kcadm.sh get clients -r manageiq --fields id -q clientId={{client_id}} | grep -Po {{id_grep_pattern}}"
+  ignore_errors: True
+  register: client_results
+- set_fact:
+    client_results_id: "{{ client_results.stdout }}"
+
+- name: delete manageiq client if exists
+  command: "sh {{bin_dir}}/kcadm.sh delete clients/{{client_results_id}} -r manageiq"
+  when: client_results_id != "" 
+
+- name: create manageiq client
+  command: "sh {{bin_dir}}/kcadm.sh create clients -r manageiq -f {{data_dir}}/manageiq-oidc-client.json"
+
+
+- name: check if manageiq test user exists
+  shell: "{{bin_dir}}/kcadm.sh get users -r manageiq --fields id -q username={{sample_username}} | grep -Po {{id_grep_pattern}}"
+  ignore_errors: True
+  register: user_results
+- set_fact:
+    user_results_id: "{{ user_results.stdout }}"
+
+- name: delete manageiq user if exists
+  command: "sh {{bin_dir}}/kcadm.sh delete users/{{user_results_id}} -r manageiq"
+  when: user_results_id != "" 
+
+- name: create manageiq test user
+  command: "sh {{bin_dir}}/kcadm.sh create users -r manageiq -f {{data_dir}}/manageiq-users.json"
+  ignore_errors: True
+  register: user_create_results
+- set_fact:
+    user_id: "{{ user_create_results.stderr | regex_search(id_regex_pattern, '\\1') | first }}"
+- debug:
+    var: user_id
+
+- name: reset password of manageiq test user
+  command: "sh {{bin_dir}}/kcadm.sh set-password -r manageiq --username {{sample_username}} --new-password {{sample_userpass}}"
+
+
+- name: check if manageiq admin group exists
+  shell: "{{bin_dir}}/kcadm.sh get groups -r manageiq --fields id -q name={{miq_su_group_name}} | grep -Po {{id_grep_pattern}}"
+  ignore_errors: True
+  register: group_results
+- set_fact:
+    group_results_id: "{{ group_results.stdout }}"
+
+- name: delete manageiq admin group if exists
+  command: "sh {{bin_dir}}/kcadm.sh delete groups/{{group_results_id}} -r manageiq"
+  when: group_results_id != "" 
+
+- name: create manageiq admin group if necessary
+  command: "sh {{bin_dir}}/kcadm.sh create groups -r manageiq -s name={{miq_su_group_name}}"
+  ignore_errors: True
+  register: group_create_results
+- set_fact:
+    group_id: "{{ group_create_results.stderr | regex_search(id_regex_pattern, '\\1') | first }}"
+- debug:
+    var: group_id
+
+
+- name: associate test user to manageiq su group
+  command: "sh {{bin_dir}}/kcadm.sh update users/{{user_id}}/groups/{{group_id}} -r manageiq -s realm=manageiq -s userId={{user_id}} -s groupId={{group_id}} -n"
+  ignore_errors: True
+
+  

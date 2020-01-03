@@ -1,0 +1,6 @@
+---
+- hosts: all
+  vars_files:
+    - vars/all.yml
+  roles: 
+    - import-fixtures

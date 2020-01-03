@@ -1,0 +1,132 @@
+{
+  "id" : "028c639e-cd14-4ca0-89be-c87bc6aee96c",
+  "clientId" : "manageiq-saml",
+  "name" : "Manageiq",
+  "description" : "External authentication (SAML)",
+  "rootUrl" : "https://server",
+  "adminUrl" : "",
+  "baseUrl" : "https://server/ui/service",
+  "surrogateAuthRequired" : false,
+  "enabled" : true,
+  "clientAuthenticatorType" : "client-secret",
+  "redirectUris" : [ "https://server/saml2/postResponse", "https://server/saml2/paosResponse" ],
+  "webOrigins" : [ "https://localhost:8443" ],
+  "notBefore" : 0,
+  "bearerOnly" : false,
+  "consentRequired" : false,
+  "standardFlowEnabled" : true,
+  "implicitFlowEnabled" : false,
+  "directAccessGrantsEnabled" : false,
+  "serviceAccountsEnabled" : false,
+  "publicClient" : false,
+  "frontchannelLogout" : true,
+  "protocol" : "saml",
+  "attributes" : {
+    "saml.assertion.signature" : "true",
+    "saml_assertion_consumer_url_redirect" : "https://server/saml2/postResponse",
+    "saml.force.post.binding" : "true",
+    "saml.multivalued.roles" : "false",
+    "saml.encrypt" : "true",
+    "login_theme" : "keycloak",
+    "saml_assertion_consumer_url_post" : "https://server/saml2/postResponse",
+    "saml.server.signature" : "true",
+    "saml.server.signature.keyinfo.ext" : "false",
+    "exclude.session.state.from.auth.response" : "false",
+    "saml.signing.certificate" : "MIICrjCCAZYCCQCgk19vZg4MpTANBgkqhkiG9w0BAQsFADAZMRcwFQYDVQQDDA5sb2NhbGhvc3Q6ODQ0MzAeFw0xOTAyMjMyMzQwMzRaFw0yOTAyMjIyMzQwMzRaMBkxFzAVBgNVBAMMDmxvY2FsaG9zdDo4NDQzMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwiyp1fphLEeRnl5a3GOiLpoPqxkDp8/tqUZdvOvPVVISIwYr9yVjV9u5CVe3y8Q8KD22LRZMeCF2bHVxZ1nDDhZpA6V7yofKh4yaOE4qtCum/Qep7BW+NqZK/8zCtu4sEZOb+FHtPbwQVukkrF5ZS25JGRFEPxdOl3NqgNaLD5M8Z/XEZJBAB5UDT6EafxoCeJNlpR/NRDS8j5k3nsgFqXo0uVSxeSq1AXzKnuElgs//tcBKrbQcb9ngujE9FnyELqfPBf+nR/I/PAvAzAe/1tI/ZFTDcWmUutd9Lnq1ax1JcHDnfNvI/vbC0jvzh3wMy64sT575TcmlEnCqWBYOwQIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQCV1ugB+bnuTfPToExQrmdGyq/CggcW0/opGeZhMgjgVZR8Sqax5HD7J1CdrOHLvulFZxQl4BsOpBL+qsx4rHG42THqpuBsri9kGBs5068pDCXsoApNKJmX1Qi9FCVqybtLJ8nRRnoeIzdbTG3XCp/kvi4xo/FxvYoLI2cxgDKYtr+zntQMzt+JSUXpxVx52TkvNhyUjw0IxfDMjuIqqx4yA5EOgD3Jr+HOkPkaqz1xrjuuITAmcpL1tOHHLu8E/hSCMTXoN+7E0SxWuVTRIB1UDDw5BltrosSoZ1o0juDKxSAldMITYC6QwLaUP+1fhfNtCorSBl2sS7Nx/wu33uJ8",
+    "saml_single_logout_service_url_redirect" : "https://server/saml2/logout",
+    "saml.signature.algorithm" : "RSA_SHA256",
+    "saml_force_name_id_format" : "false",
+    "saml.client.signature" : "true",
+    "saml.encryption.certificate" : "MIICrjCCAZYCCQCgk19vZg4MpTANBgkqhkiG9w0BAQsFADAZMRcwFQYDVQQDDA5sb2NhbGhvc3Q6ODQ0MzAeFw0xOTAyMjMyMzQwMzRaFw0yOTAyMjIyMzQwMzRaMBkxFzAVBgNVBAMMDmxvY2FsaG9zdDo4NDQzMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwiyp1fphLEeRnl5a3GOiLpoPqxkDp8/tqUZdvOvPVVISIwYr9yVjV9u5CVe3y8Q8KD22LRZMeCF2bHVxZ1nDDhZpA6V7yofKh4yaOE4qtCum/Qep7BW+NqZK/8zCtu4sEZOb+FHtPbwQVukkrF5ZS25JGRFEPxdOl3NqgNaLD5M8Z/XEZJBAB5UDT6EafxoCeJNlpR/NRDS8j5k3nsgFqXo0uVSxeSq1AXzKnuElgs//tcBKrbQcb9ngujE9FnyELqfPBf+nR/I/PAvAzAe/1tI/ZFTDcWmUutd9Lnq1ax1JcHDnfNvI/vbC0jvzh3wMy64sT575TcmlEnCqWBYOwQIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQCV1ugB+bnuTfPToExQrmdGyq/CggcW0/opGeZhMgjgVZR8Sqax5HD7J1CdrOHLvulFZxQl4BsOpBL+qsx4rHG42THqpuBsri9kGBs5068pDCXsoApNKJmX1Qi9FCVqybtLJ8nRRnoeIzdbTG3XCp/kvi4xo/FxvYoLI2cxgDKYtr+zntQMzt+JSUXpxVx52TkvNhyUjw0IxfDMjuIqqx4yA5EOgD3Jr+HOkPkaqz1xrjuuITAmcpL1tOHHLu8E/hSCMTXoN+7E0SxWuVTRIB1UDDw5BltrosSoZ1o0juDKxSAldMITYC6QwLaUP+1fhfNtCorSBl2sS7Nx/wu33uJ8",
+    "tls.client.certificate.bound.access.tokens" : "false",
+    "saml.authnstatement" : "true",
+    "display.on.consent.screen" : "false",
+    "saml_name_id_format" : "username",
+    "saml.onetimeuse.condition" : "false",
+    "saml_signature_canonicalization_method" : "http://www.w3.org/2001/10/xml-exc-c14n#"
+  },
+  "authenticationFlowBindingOverrides" : { },
+  "fullScopeAllowed" : true,
+  "nodeReRegistrationTimeout" : -1,
+  "protocolMappers" : [ {
+    "id" : "48656229-0c77-43e0-9e8b-c02aa96e0eda",
+    "name" : "lastname",
+    "protocol" : "saml",
+    "protocolMapper" : "saml-user-property-mapper",
+    "consentRequired" : false,
+    "config" : {
+      "attribute.nameformat" : "Basic",
+      "user.attribute" : "lastName",
+      "friendly.name" : "lastname",
+      "attribute.name" : "lastname"
+    }
+  }, {
+    "id" : "3c4f4efe-188e-4982-b873-f3ad7df041de",
+    "name" : "firstname",
+    "protocol" : "saml",
+    "protocolMapper" : "saml-user-property-mapper",
+    "consentRequired" : false,
+    "config" : {
+      "attribute.nameformat" : "Basic",
+      "user.attribute" : "firstName",
+      "friendly.name" : "firstname",
+      "attribute.name" : "firstname"
+    }
+  }, {
+    "id" : "52647dcf-0d23-4e46-856a-1a2e9e579a78",
+    "name" : "email",
+    "protocol" : "saml",
+    "protocolMapper" : "saml-user-property-mapper",
+    "consentRequired" : false,
+    "config" : {
+      "attribute.nameformat" : "Basic",
+      "user.attribute" : "email",
+      "friendly.name" : "email",
+      "attribute.name" : "email"
+    }
+  }, {
+    "id" : "41f59fc2-5cd6-4147-aa4e-0a76d2737734",
+    "name" : "groups",
+    "protocol" : "saml",
+    "protocolMapper" : "saml-group-membership-mapper",
+    "consentRequired" : false,
+    "config" : {
+      "single" : "true",
+      "attribute.nameformat" : "Basic",
+      "full.path" : "true",
+      "friendly.name" : "groups",
+      "attribute.name" : "groups"
+    }
+  }, {
+    "id" : "00bf16b6-1405-4652-97a1-9bd3e1deb87a",
+    "name" : "fullname",
+    "protocol" : "saml",
+    "protocolMapper" : "saml-user-attribute-mapper",
+    "consentRequired" : false,
+    "config" : {
+      "attribute.nameformat" : "Basic",
+      "user.attribute" : "fullName",
+      "friendly.name" : "fullname",
+      "attribute.name" : "fullname"
+    }
+  }, {
+    "id" : "5b067007-5919-4db9-a6a7-c5022123614f",
+    "name" : "username",
+    "protocol" : "saml",
+    "protocolMapper" : "saml-user-property-mapper",
+    "consentRequired" : false,
+    "config" : {
+      "attribute.nameformat" : "Basic",
+      "user.attribute" : "username",
+      "friendly.name" : "username",
+      "attribute.name" : "username"
+    }
+  } ],
+  "defaultClientScopes" : [ "role_list", "profile", "email" ],
+  "optionalClientScopes" : [ "address", "phone", "offline_access" ],
+  "access" : {
+    "view" : true,
+    "configure" : true,
+    "manage" : true
+  }
+}

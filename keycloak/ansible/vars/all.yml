@@ -1,0 +1,16 @@
+---
+# common vars file
+verbose: true
+kc_server: http://keycloak:8080
+adm_user: admin
+adm_pass: Pa55w0rd
+bin_dir: /opt/jboss/keycloak/bin
+parent_data_dir: /opt/jboss/keycloak
+data_dir: /opt/jboss/keycloak/manageiq-realm-data
+realm_name: manageiq
+client_id: manageiq
+sample_username: foo
+sample_userpass: bar
+miq_su_group_name: EvmGroup-super_administrator
+id_grep_pattern: "'\"id\" : *\\K\"[^\"]*\"'"
+id_regex_pattern: "'(.+?)'"
