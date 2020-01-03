@@ -2,7 +2,7 @@
 
 ## ManageIQ Self-Service UI OIDC with Keycloak
 
-This project is a POC [^1] to demonstrate that External Authentication on ManageIQ Appliance can work with **OIDC** [^2] both:
+This project is a POC (proof of concept) to demonstrate that **external authentication** on **ManageIQ Appliance** can work with **OIDC** ([OpenID Connect](https://en.wikipedia.org/wiki/OpenID_Connect "OpenID Connect")) both:
 - on the Appliance’s **Web administrative UI**
 - and on the **Self-Service UI** (and partially on the REST API, too)
 
@@ -20,10 +20,7 @@ This POC only requires **Docker** on your host machine, in order to run **3 dock
 
 All the Apache and OIDC configuration (detailed in ManageIQ official documentation) is handled at docker build stages, and through an ansible playbook at run stage, so sandbox tests can be done quickly out of the box without the hassle of configuring things first.
 
-It uses modified manageiq docker images
-
-[^1]: Proof of concept
-[^2]: [OpenID Connect](https://en.wikipedia.org/wiki/OpenID_Connect "OpenID Connect")
+As explained below, the POC uses modified version of manageiq docker images.
 
 
 ### Requirements
@@ -69,11 +66,11 @@ Then just launch docker-compose command:
 ```shell
 docker-compose -f compose.yml up
 ```
-Notes: The first time you build the stack, and depending on your internet connection, it can take about 5 or 10 minutes for the whole process to complete (the time to download parent docker images, build new ones, and run the containers), so be patient. For this reason, launching the stack in the background (adding option -d in the docker-compose command) is not advised, at least the first time.
+**Notes**: the first time the stack is built, and depending on your internet connection, it can take about 5 or 10 minutes for the whole process to complete (the time to download parent docker images, build new ones, and run the containers), so be patient. For this reason, launching the stack in the background (adding option -d in the docker-compose command) is not advised, at least the first time.
 
 You will know that everything is correctly started when you will be able:
-- to browse ManageIQ admin web view at this url: https://server/#/ (the first time, the browser will complain about incorrect SSL certificates, it's OK, just go through);
-- to access Keycloak interface from there: http://localhost:8080.
+- to **browse ManageIQ admin web view** on your host at this url: https://server/#/ (the first time, the browser will complain about incorrect SSL certificates, it's OK, just go through);
+- to **access Keycloak interface** from there: http://localhost:8080.
 
 
 4. **Configure Keycloak and load fixtures**
@@ -87,8 +84,8 @@ Wait for the whole playbook to finish (it takes about 30/40 sec).
 
 As explained in the [official ManageIQ documention](https://www.manageiq.org/docs/reference/latest/auth/openid_connect#configuring-the-administrative-ui "official ManageIQ documention"), you need to complete the following steps:
 
-  From a browser (Chrome, Firefox, etc.), navigate to this url : https://server/#/. 
-  Login as admin (default admin password is "smartvm"), then in Configure → Configuration → Authentication section:
+From a browser (Chrome, Firefox, etc.), navigate to this url : https://server/#/. 
+Login as admin (default admin password is "smartvm"), then in Configure → Configuration → Authentication section:
 
 1. Set mode to External (httpd)
 
@@ -105,24 +102,25 @@ Click Save and log out from admin web view.
 
 #### OIDC on the admin view
 
-  To test OIDC external authentication on the admin web view, just go to the admin home page here: https://server/#/
-  Then click on "Log in to corporate system"
-  You'll be redirect to Keycloak realm login page.
-  From there, sign in as "foo" user, using "foo" as username, and "bar" as password.
-  Validate and you will be redirected to the admin dashboard view, logged in as "foo" super admin user.
+To test OIDC external authentication on the admin web view: 
+- Just go to the admin home page here: https://server/#/
+- Then click on "Log in to corporate system", you'll be redirect to Keycloak realm login page.
+- From there, sign in as "foo" user, using "foo" as username, and "bar" as password.
+- Validate and you will be redirected to the admin dashboard view, logged in as "foo" super admin user.
 
 Notes : Obviously, authenticating to the admin interface requires to own the proper rights. That's the case for our "foo" user who belongs to the "EvmGroup-super_administrator" group.
 
 #### OIDC on the self service UI
 
-  To test OIDC external authentication on the self service UI, just browse this url: https://server/ui/service/login
-  From there, if OIDC has been properly enabled on the appliance, you will see two buttons allowing you to sign in on the admin or the SUI interface.
-  Click on the SUI button. And from the Keycloak realm login view, use the same login/pass as for the admin UI (foo/bar).
-  You'll be redirected to the Self Service UI, and logged in as "foo" user.
+To test OIDC external authentication on the self service UI: 
+- Just browse this url: https://server/ui/service/login
+- From there, if OIDC has been properly enabled on the appliance, you will see two buttons allowing you to sign in on the admin or the SUI interface.
+- Click on the SUI button. And from the Keycloak realm login view, use the same login/pass as for the admin UI (foo/bar).
+- You'll be redirected to the Self Service UI, and logged in as "foo" user.
 
 #### Switching between admin / SUI interfaces
 
-WHen you are logged out, you can use the link present at the top of the Keycloak realm login page if you need to switch between admin and user interfaces.
+When you are logged out, you can use the link present at the top of the Keycloak realm login page if you need to switch between admin and user interfaces.
 WHen you are logged in on the SUI, you can use the shortcut in the top menu to reach the admin view. You'll be connected without having to re-authenticate a second time.
 
 Note that as we use the same keycloak client for both interfaces, once you are connected on one, you can connect on the other without the need to re-authenticate because a valid session already exists on the Keycloak side.
@@ -143,8 +141,8 @@ Please be aware that these forks only work with the *Hammer* branch of ManageIQ.
 
 To dig deeper into the changes made in the MIQ components, you can have a look into this 2 main commits:
 
-https://github.com/Plemi/manageiq-ui-service/commit/249af259fe32bc48a7aefe752536c909cf909280 3
-https://github.com/Plemi/manageiq-api/commit/47af2f6346228b92e71f4ff6e9937f9111643988 5
+https://github.com/Plemi/manageiq-ui-service/commit/249af259fe32bc48a7aefe752536c909cf909280
+https://github.com/Plemi/manageiq-api/commit/47af2f6346228b92e71f4ff6e9937f9111643988
 
 
 
