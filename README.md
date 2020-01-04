@@ -134,7 +134,7 @@ But keep in mind that as the admin interface and the self service interface are 
 
 This POC uses the following forks of official ManageIQ repositories / components :
 
-- Service UI app : https://github.com/Plemi/manageiq-ui-service (the fork add support for SSO (SAML, OIDC) user authentication in the Service UI)
+- Service UI app : https://github.com/Plemi/manageiq-ui-service (the fork adds support for SSO (SAML, OIDC) user authentication in the Service UI)
 - ManagegIQ Api plugin : https://github.com/Plemi/manageiq-api (which is based on this PR https://github.com/ManageIQ/manageiq/pull/14959/files by Abellotti)
 - Core ManageIQ app : https://github.com/Plemi/manageiq (which has a modified Gemfile to install the forked API plugin version)
 - ManageIQ Pods : https://github.com/Plemi/manageiq-pods (containing modified Dockerfiles pointing to the previous forked projects, in order to build proper docker images)
