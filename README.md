@@ -54,7 +54,7 @@ Add the following lines at the end, then save and quit:
 127.0.0.1       server
 ~~~~
 
-On Windows, follow [theese steps](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/ "how to edit hosts file on Windows")
+On Windows, follow [theese steps](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/ "how to edit hosts file on Windows").
 
 3. **Launch docker-compose stack**
 
@@ -129,6 +129,16 @@ Note that as we use the same keycloak client for both interfaces, once you are c
 
 But keep in mind that as the admin interface and the self service interface are two different apps, you'll be connected on each with a different session on the client side, so you need to **log out individually** on each one.
 
+#### Adding new users in Keycloak interface
+
+If you want to create new users (or modify user foo) to test authentication with your own data, you can do the following:
+1. Authenticate as admin in the Keycloak web interface (http://localhost:8080/auth/admin/), using admin / Pa55w0rd as credentials (password is set in the compose.yml file).
+2. Go to the Users section (http://localhost:8080/auth/admin/master/console/#/realms/manageiq/users) and click the "Add User" button on the right. Fill in the form, validate and don't forget to create credentials once the user is created (from the Credentials tab in the user view).
+3. Attach the new user to at least one valid group (a group named exactly as an existing ManageIQ group). Add new group(s) first from the groups section if necessary, then attach user to it(s) from the Groups tab in the user view.
+4. Then you can try to authenticate on ManageIQ with your newly created user credentials.
+
+**Notes**: you can also modify manageiq-users.json and manageiq-group.json data fixtures (located in the keycloak/ansible/roles/import-fixtures/files/manageiq-realm-data/ directory) or create your own .json files and use our ansible playbook (or a new one) to load your data from a docker command
+(see keycloak/ansible/roles/import-fixtures/tasks/main.yml).
 
 ### Based upon forked projects of ManageIQ
 
