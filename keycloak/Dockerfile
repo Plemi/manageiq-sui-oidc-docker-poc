@@ -1,4 +1,4 @@
-FROM jboss/keycloak:latest
+FROM jboss/keycloak:6.0.1
 
 USER root
 ENV pip_packages "ansible"
