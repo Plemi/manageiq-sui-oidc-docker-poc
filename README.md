@@ -6,7 +6,7 @@ This project is a POC (proof of concept) to demonstrate that **external authenti
 - on the Appliance’s **Web administrative UI**
 - and on the **Self-Service UI** (and partially on the REST API, too)
 
-It relies on an experimental implementation of the *Hammer* version of **ManageIQ**, and more precisely on 2 forked MIQ official components: 
+It relies on an experimental implementation of the *Ivanchuk* version of **ManageIQ**, and more precisely on 2 forked MIQ official components: 
 - the [ManagegIQ Api plugin](https://github.com/Plemi/manageiq-ui-service "ManagegIQ Api plugin"), 
 - and the [Service UI app](https://github.com/Plemi/manageiq-api "Service UI app").
 (See below for details about these forks).
@@ -149,7 +149,7 @@ This POC uses the following forks of official ManageIQ repositories / components
 - Core ManageIQ app : https://github.com/Plemi/manageiq (which has a modified Gemfile to install the forked API plugin version)
 - ManageIQ Pods : https://github.com/Plemi/manageiq-pods (containing modified Dockerfiles pointing to the previous forked projects, in order to build proper docker images)
 
-Please be aware that these forks only work with the *Hammer* branch of ManageIQ.
+Please be aware that these forks only work with the *Hammer* and *Ivanchuk* branches of ManageIQ.
 
 To have an overview of the changes made in the MIQ components, you can take a look into this 2 main commits:
 
