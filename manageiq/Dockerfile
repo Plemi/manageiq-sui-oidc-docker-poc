@@ -1,14 +1,17 @@
-# FROM manageiq/manageiq-pods:frontend-latest-ivanchuk
-FROM plemipublic/manageiq-pods:frontend-latest-ivanchuk
+
+ARG IMAGE_REF=latest-ivanchuk
+#FROM manageiq/manageiq-pods:frontend-${IMAGE_REF}
+FROM plemipublic/manageiq-pods:frontend-${IMAGE_REF}
 MAINTAINER ManageIQ https://github.com/ManageIQ/manageiq
+
+## Set build ARG
+ARG REF=ivanchuk
 
 ENV DATABASE_URL=postgresql://root@localhost/vmdb_production?encoding=utf8&pool=5&wait_timeout=5
 
 RUN yum -y install --setopt=tsflags=nodocs \
                    memcached               \
-                   rh-postgresql95-postgresql-server \
-                   rh-postgresql95-postgresql-pglogical \
-                   rh-postgresql95-repmgr  \
+                   postgresql-server       \
                    mod_ssl                 \
                    mod_auth_kerb           \
                    mod_authnz_pam          \
@@ -24,7 +27,8 @@ RUN yum -y install --setopt=tsflags=nodocs \
 COPY apache/manageiq-remote-user-openidc.conf /etc/httpd/conf.d
 COPY apache/manageiq-external-auth-openidc.conf /etc/httpd/conf.d
 
-VOLUME [ "/var/opt/rh/rh-postgresql95/lib/pgsql/data" ]
+# VOLUME [ "/var/opt/rh/rh-postgresql95/lib/pgsql/data" ]
+VOLUME [ "/var/lib/pgsql/data" ]
 
 # Initialize SSH
 RUN ssh-keygen -q -t dsa -N '' -f /etc/ssh/ssh_host_dsa_key && \
