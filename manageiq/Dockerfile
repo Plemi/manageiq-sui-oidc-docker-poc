@@ -1,34 +1,23 @@
-
-ARG IMAGE_REF=latest-ivanchuk
-#FROM manageiq/manageiq-pods:frontend-${IMAGE_REF}
-FROM plemipublic/manageiq-pods:frontend-${IMAGE_REF}
+ARG IMAGE_REF=latest-kasparov
+FROM manageiq/manageiq-ui-worker:${IMAGE_REF}
 MAINTAINER ManageIQ https://github.com/ManageIQ/manageiq
-
-## Set build ARG
-ARG REF=ivanchuk
 
 ENV DATABASE_URL=postgresql://root@localhost/vmdb_production?encoding=utf8&pool=5&wait_timeout=5
 
-RUN yum -y install --setopt=tsflags=nodocs \
-                   memcached               \
-                   postgresql-server       \
-                   mod_ssl                 \
-                   mod_auth_kerb           \
-                   mod_authnz_pam          \
-                   mod_intercept_form_submit \
-                   mod_lookup_identity     \
-                   mod_auth_mellon         \
-                   mod_auth_openidc        \
-                   &&                      \
-    yum clean all
+RUN dnf -y module enable mod_auth_openidc
+
+RUN dnf -y --disableplugin=subscription-manager --setopt=tsflags=nodocs install \
+      memcached               \
+      postgresql-server       \
+      mod_ssl                 \
+      mod_auth_openidc        \
+      &&                      \
+    dnf clean all
 
 ## Configuring Apache OIDC module
 
 COPY apache/manageiq-remote-user-openidc.conf /etc/httpd/conf.d
 COPY apache/manageiq-external-auth-openidc.conf /etc/httpd/conf.d
-
-# VOLUME [ "/var/opt/rh/rh-postgresql95/lib/pgsql/data" ]
-VOLUME [ "/var/lib/pgsql/data" ]
 
 # Initialize SSH
 RUN ssh-keygen -q -t dsa -N '' -f /etc/ssh/ssh_host_dsa_key && \
@@ -41,43 +30,17 @@ RUN ssh-keygen -q -t dsa -N '' -f /etc/ssh/ssh_host_dsa_key && \
     chmod 600 /root/.ssh/*
 
 ## Copy/link the appliance files again so that we get ssl
-RUN ${APPLIANCE_ROOT}/setup && \
+RUN source /etc/default/evm && \
+    $APPLIANCE_SOURCE_DIRECTORY/setup && \
     mv /etc/httpd/conf.d/ssl.conf{,.orig} && \
     echo "# This file intentionally left blank. ManageIQ maintains its own SSL configuration" > /etc/httpd/conf.d/ssl.conf
 
-## Copy appliance-initialize script and service unit file
-COPY docker-assets/appliance-initialize.sh /usr/bin
+## Overwrite entrypoint from pods repo
+COPY docker-assets/entrypoint /usr/local/bin
 
-## Copy new entrypoint
-COPY container-assets/entrypoint /usr/bin
+EXPOSE 8443:443 22
 
-EXPOSE 443 22
+LABEL name="manageiq"
 
-## Atomic Labels
-# The UNINSTALL label by DEFAULT will attempt to delete a container (rm) and image (rmi) if the container NAME is the same as the actual IMAGE
-# NAME is set via -n flag to ALL atomic commands (install,run,stop,uninstall)
-LABEL name="manageiq" \
-      vendor="ManageIQ" \
-      version="Ivanchuk" \
-      release=${REF} \
-      architecture="x86_64" \
-      url="http://manageiq.org/" \
-      summary="ManageIQ appliance image" \
-      description="ManageIQ is a management and automation platform for virtual, private, and hybrid cloud infrastructures." \
-      INSTALL='docker run -ti \
-                --name ${NAME}_volume \
-                --entrypoint /usr/bin/appliance-initialize.sh \
-                $IMAGE' \
-      RUN='docker run -di \
-            --name ${NAME}_run \
-            -v /etc/localtime:/etc/localtime:ro \
-            --volumes-from ${NAME}_volume \
-            -p 443:443 \
-            $IMAGE' \
-      STOP='docker stop ${NAME}_run && echo "Container ${NAME}_run has been stopped"' \
-      UNINSTALL='docker rm -v ${NAME}_volume ${NAME}_run && echo "Uninstallation complete"'
-
-LABEL io.k8s.description="ManageIQ is a management and automation platform for virtual, private, and hybrid cloud infrastructures." \
-      io.k8s.display-name="ManageIQ" \
-      io.openshift.expose-services="443:https" \
-      io.openshift.tags="ManageIQ,miq,manageiq"
+VOLUME "/var/lib/pgsql/data"
+VOLUME ${APP_ROOT}

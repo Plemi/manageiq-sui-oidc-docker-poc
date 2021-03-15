@@ -10,7 +10,7 @@
   "enabled" : true,
   "clientAuthenticatorType" : "client-secret",
   "secret" : "7c6bd4f1-78fc-4f74-92a7-8c99ded792fb",
-  "redirectUris" : [ "https://server/*", "https://server/oidc_login/redirect_uri" ],
+  "redirectUris" : [ "https://server/*", "https://server/oidc_login/redirect_uri", "https://server/ui/service/" ],
   "webOrigins" : [ "https://server", "https://localhost", "https://manageiq" ],
   "notBefore" : 0,
   "bearerOnly" : false,
@@ -76,7 +76,7 @@
     "config" : {
       "full.path" : "false",
       "id.token.claim" : "true",
-      "access.token.claim" : "false",
+      "access.token.claim" : "true",
       "claim.name" : "groups",
       "userinfo.token.claim" : "false"
     }

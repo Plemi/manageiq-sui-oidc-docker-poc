@@ -16,6 +16,9 @@ RUN yum makecache \
       python3 \
  && yum clean all
 
+# Upgrading pip3
+RUN python3 -m pip install --upgrade pip
+
 # Install Ansible via Pip.
 RUN pip3 install $pip_packages
 
