@@ -6,10 +6,7 @@ This project is a POC (proof of concept) to demonstrate that **external authenti
 - on the Appliance’s **Web administrative UI**
 - and on the **Self-Service UI** (and partially on the REST API, too)
 
-It relies on an experimental implementation of the *Ivanchuk* version of **ManageIQ**, and more precisely on 2 forked MIQ official components: 
-- the [ManagegIQ Api plugin](https://github.com/Plemi/manageiq-ui-service "ManagegIQ Api plugin"), 
-- and the [Service UI app](https://github.com/Plemi/manageiq-api "Service UI app").
-(See below for details about these forks).
+It relies on the official *Kasparov* version of **ManageIQ**
 
 It uses **Keycloak** as an Identity Provider, and **Ansible** (automation tool) to configure Keycloak with a proper *realm* and a *client* for ManageIQ instance (following [MIQ official guidelnes for OIDC](https://www.manageiq.org/docs/reference/latest/auth/openid_connect "MIQ official guidelnes for OIDC")) and also to load some basic user fixtures (a "foo" test user belonging to a group matching MIQ super administrator group) into Keycloak DB, to easier things.
 
@@ -50,7 +47,7 @@ vim /etc/hosts
 ```
 Add the following lines at the end, then save and quit:
 ~~~~
-127.0.0.1       keycloak
+127.0.0.1       local.keycloak.com
 127.0.0.1       server
 ~~~~
 
@@ -70,14 +67,14 @@ docker-compose -f compose.yml up
 
 You will know that everything is correctly started when you will be able:
 - to **browse ManageIQ admin web view** on your host at this url: https://server/#/ (the first time, the browser will complain about incorrect SSL certificates, it's OK, just go through);
-- to **access Keycloak interface** from there: http://localhost:8080.
+- to **access Keycloak interface** from there: http://local.keycloak.com:8080 (or there: https://local.keycloak.com:8443).
 
 
 4. **Configure Keycloak and load fixtures**
 
 Open another terminal window, and launch this docker command:
 ```shell
-docker exec -it manageiq-sui-oidc-docker-poc_keycloak_1 /opt/ansible/load-fixtures.sh
+docker exec -it manageiq-sui-oidc-docker-poc_local.keycloak.com_1 /opt/ansible/load-fixtures.sh
 ```
 Wait for the whole playbook to finish (it takes about 30/40 sec).
 
@@ -114,16 +111,14 @@ Notes : Obviously, authenticating to the admin interface requires to own the pro
 #### OIDC on the self service UI
 
 To test OIDC external authentication on the self service UI: 
-- Just browse this url: https://server/ui/service/login
-- From there, if OIDC has been properly enabled on the appliance, you will see two buttons allowing you to sign in on the admin or the SUI interface.
-- Click on the SUI button. And from the Keycloak realm login view, use the same login/pass as for the admin UI (foo/bar).
+- Just browse this url: https://server/ui/service
+- From there, if OIDC has been properly enabled on the appliance, you will see the "Log in to corporate system" button.
+- Click on the login button. And from the Keycloak realm login view, use the same login/pass as for the admin UI (foo/bar).
 - You'll be redirected to the Self Service UI, and logged in as "foo" user.
 
 #### Switching between admin / SUI interfaces
 
-When you are logged out, you can use the link present at the top of the Keycloak realm login page if you need to switch between admin and user interfaces.
-
-When you are logged in on the SUI, you can use the shortcut in the top menu to reach the admin view. You'll be connected without having to re-authenticate a second time.
+When you are logged in on the admin or the SUI interface, you can navigate to the other interface. You'll be connected without having to re-authenticate a second time.
 
 Note that as we use the same keycloak client for both interfaces, once you are connected on one, you can connect on the other without the need to re-authenticate because a valid session already exists on the Keycloak side.
 
@@ -140,22 +135,18 @@ If you want to create new users (or modify user foo) to test authentication with
 **Notes**: you can also modify manageiq-users.json and manageiq-group.json data fixtures (located in the keycloak/ansible/roles/import-fixtures/files/manageiq-realm-data/ directory) or create your own .json files and use our ansible playbook (or a new one) to load your data from a docker command
 (see keycloak/ansible/roles/import-fixtures/tasks/main.yml).
 
-### Based upon forked projects of ManageIQ
+### Previously based upon forked projects of ManageIQ
 
-This POC uses the following forks of official ManageIQ repositories / components :
+This version of the POC now uses the official *Kasparov* version of ManageIQ.
+In former versions, it was relying on the following forks of official ManageIQ repositories / components :
 
 - Service UI app : https://github.com/Plemi/manageiq-ui-service (the fork adds support for SSO (SAML, OIDC) user authentication in the Service UI)
 - ManagegIQ Api plugin : https://github.com/Plemi/manageiq-api (which is based on this PR https://github.com/ManageIQ/manageiq/pull/14959/files by Abellotti)
 - Core ManageIQ app : https://github.com/Plemi/manageiq (which has a modified Gemfile to install the forked API plugin version)
 - ManageIQ Pods : https://github.com/Plemi/manageiq-pods (containing modified Dockerfiles pointing to the previous forked projects, in order to build proper docker images)
 
-Please be aware that these forks only work with the *Hammer* and *Ivanchuk* branches of ManageIQ.
-
-To have an overview of the changes made in the MIQ components, you can take a look into this 2 main commits:
-
-https://github.com/Plemi/manageiq-ui-service/commit/249af259fe32bc48a7aefe752536c909cf909280
-https://github.com/Plemi/manageiq-api/commit/47af2f6346228b92e71f4ff6e9937f9111643988
-
+Please be aware that these forks only worked with the *Hammer* and *Ivanchuk* branches of ManageIQ.
+A part of these forks has been implemented in the official version of ManageIQ since *Kasparov*.
 
 
 

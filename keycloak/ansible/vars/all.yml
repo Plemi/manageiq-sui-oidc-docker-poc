@@ -1,7 +1,7 @@
 ---
 # common vars file
 verbose: true
-kc_server: http://keycloak:8080
+kc_server: http://local.keycloak.com:8080
 adm_user: admin
 adm_pass: Pa55w0rd
 bin_dir: /opt/jboss/keycloak/bin
